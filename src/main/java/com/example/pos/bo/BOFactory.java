@@ -1,6 +1,8 @@
 package com.example.pos.bo;
 
+import com.example.pos.bo.bos.impl.CustomerBOImpl;
 import com.example.pos.bo.bos.impl.ItemBOImpl;
+import com.example.pos.bo.bos.impl.OrderBOImpl;
 
 public class BOFactory {
 
@@ -20,9 +22,9 @@ public class BOFactory {
             case ITEM:
                 return new ItemBOImpl();
             case CUSTOMER:
-                return null;  //need to change
+                return new CustomerBOImpl();
             case ORDER:
-                return null;  //need to change
+                return new OrderBOImpl();
             default:
                 return null;
         }
