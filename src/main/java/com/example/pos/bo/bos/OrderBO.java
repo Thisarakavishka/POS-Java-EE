@@ -6,9 +6,9 @@ import com.example.pos.dto.OrderDTO;
 import java.util.List;
 
 public interface OrderBO extends SuperBO {
-    boolean createOrder(OrderDTO dtO) throws Exception;
+    boolean createOrder(OrderDTO dto) throws Exception;
 
-    boolean updateOrder(OrderDTO dtO) throws Exception;
+    boolean updateOrder(OrderDTO dto) throws Exception;
 
     OrderDTO searchOrder(String id) throws Exception;
 

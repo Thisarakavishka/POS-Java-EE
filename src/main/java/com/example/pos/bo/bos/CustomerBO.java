@@ -6,9 +6,9 @@ import com.example.pos.dto.CustomerDTO;
 import java.util.List;
 
 public interface CustomerBO extends SuperBO {
-    boolean createCustomer(CustomerDTO dtO) throws Exception;
+    boolean createCustomer(CustomerDTO dto) throws Exception;
 
-    boolean updateCustomer(CustomerDTO dtO) throws Exception;
+    boolean updateCustomer(CustomerDTO dto) throws Exception;
 
     CustomerDTO searchCustomer(String id) throws Exception;
 
