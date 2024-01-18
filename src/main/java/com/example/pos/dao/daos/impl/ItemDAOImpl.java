@@ -27,8 +27,10 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public Item search(String id) throws Exception {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM item WHERE itemCode=?", id);
-        resultSet.next();
-        return new Item(resultSet.getString("itemCode"), resultSet.getString("itemName"), resultSet.getInt("qty"), resultSet.getDouble("price"));
+        if (resultSet.next()) {
+            return new Item(resultSet.getString("itemCode"), resultSet.getString("itemName"), resultSet.getInt("qty"), resultSet.getDouble("price"));
+        }
+        return null;
     }
 
     @Override
