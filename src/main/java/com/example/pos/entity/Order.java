@@ -1,6 +1,5 @@
 package com.example.pos.entity;
 
-import com.example.pos.dto.CustomerDTO;
 import lombok.*;
 
 import java.util.List;
@@ -16,6 +15,6 @@ public class Order {
     private double total;
     private double discount;
     private double balance;
-    private CustomerDTO customer;
+    private Customer customer;
     private List<Item> items;
 }
