@@ -4,6 +4,8 @@ import com.example.pos.bo.BOFactory;
 import com.example.pos.bo.bos.OrderBO;
 import com.example.pos.dto.OrderDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +17,8 @@ import java.io.IOException;
 @WebServlet(name = "order", urlPatterns = "/order")
 public class OrderServlet extends HttpServlet {
     OrderBO orderBO = (OrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ORDER);
+    Logger logger = LoggerFactory.getLogger("com.example.pos.servlet.OrderServlet");
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -26,16 +30,18 @@ public class OrderServlet extends HttpServlet {
             try {
                 String json = objectMapper.writeValueAsString(orderBO.searchOrder(req.getParameter("orderId")));
                 resp.getWriter().write(json);
+                logger.info("Order Fetched");
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                logger.info(e.getMessage());
             }
-        }else{
+        } else {
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 String json = objectMapper.writeValueAsString(orderBO.getAllOrders());
                 resp.getWriter().write(json);
+                logger.info("Orders Fetched");
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                logger.info(e.getMessage());
             }
         }
     }
@@ -53,9 +59,12 @@ public class OrderServlet extends HttpServlet {
         OrderDTO orderDTO = objectMapper.readValue(req.getInputStream(), OrderDTO.class);
 
         try {
-            resp.getWriter().write(orderBO.createOrder(orderDTO) ? "Order Saved" : "Order not Saved");
+            String message = orderBO.createOrder(orderDTO) ? "Order Saved" : "Order not Saved";
+            resp.getWriter().write(message);
+            logger.info(message);
         } catch (Exception e) {
             resp.getWriter().write("Something Wrong");
+            logger.info(e.getMessage());
         }
     }
 
@@ -72,9 +81,12 @@ public class OrderServlet extends HttpServlet {
         OrderDTO orderDTO = objectMapper.readValue(req.getInputStream(), OrderDTO.class);
 
         try {
-            resp.getWriter().write(orderBO.updateOrder(orderDTO) ? "Order Updated" : "Order not Updated");
+            String message = orderBO.updateOrder(orderDTO) ? "Order Updated" : "Order not Updated";
+            resp.getWriter().write(message);
+            logger.info(message);
         } catch (Exception e) {
             resp.getWriter().write("Something Wrong");
+            logger.info(e.getMessage());
         }
     }
 
@@ -88,13 +100,16 @@ public class OrderServlet extends HttpServlet {
         }
 
         try {
-            if (orderBO.deleteOrder(req.getParameter("orderId"))){
+            if (orderBO.deleteOrder(req.getParameter("orderId"))) {
                 resp.getWriter().write("Order Deleted");
-            }else {
+                logger.info("Order Deleted");
+            } else {
                 resp.getWriter().write("Order not Deleted");
+                logger.info("Order not Deleted");
             }
         } catch (Exception e) {
             resp.getWriter().write("Something Wrong");
+            logger.info(e.getMessage());
         }
     }
 }

@@ -4,6 +4,8 @@ import com.example.pos.bo.BOFactory;
 import com.example.pos.bo.bos.CustomerBO;
 import com.example.pos.dto.CustomerDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,30 +14,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "customer",urlPatterns = "/customer")
+@WebServlet(name = "customer", urlPatterns = "/customer")
 public class CustomerServlet extends HttpServlet {
     CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
+    Logger logger = LoggerFactory.getLogger("com.example.pos.servlet.CustomerServlet");
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("Customer doGet-------------------------");
 
         resp.setContentType("application/json");
-        if(req.getParameter("customerId") != null){
+        if (req.getParameter("customerId") != null) {
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 String json = objectMapper.writeValueAsString(customerBO.searchCustomer(req.getParameter("customerId")));
                 resp.getWriter().write(json);
+                logger.info("Customer Fetched");
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                logger.info(e.getMessage());
             }
-        }else {
+        } else {
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 String json = objectMapper.writeValueAsString(customerBO.getAllCustomers());
                 resp.getWriter().write(json);
+                logger.info("Customers Fetched");
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                logger.info(e.getMessage());
             }
         }
     }
@@ -52,12 +57,14 @@ public class CustomerServlet extends HttpServlet {
         ObjectMapper objectMapper = new ObjectMapper();
         CustomerDTO customerDTO = objectMapper.readValue(req.getInputStream(), CustomerDTO.class);
 
-        System.out.println(customerDTO);
-
         try {
-            resp.getWriter().write(customerBO.createCustomer(customerDTO) ? "Customer Saved":"Customer not Saved");
+            String message = customerBO.createCustomer(customerDTO) ? "Customer Saved" : "Customer not Saved";
+            resp.getWriter().write(message);
+            logger.info(message);
+
         } catch (Exception e) {
             resp.getWriter().write("Something Wrong");
+            logger.info(e.getMessage());
         }
     }
 
@@ -74,9 +81,12 @@ public class CustomerServlet extends HttpServlet {
         CustomerDTO customerDTO = objectMapper.readValue(req.getInputStream(), CustomerDTO.class);
 
         try {
-            resp.getWriter().write(customerBO.updateCustomer(customerDTO) ? "Customer Updated" : "Customer not Updated");
+            String message = customerBO.updateCustomer(customerDTO) ? "Customer Updated" : "Customer not Updated";
+            resp.getWriter().write(message);
+            logger.info(message);
         } catch (Exception e) {
             resp.getWriter().write("Something Wrong");
+            logger.info(e.getMessage());
         }
     }
 
@@ -90,13 +100,16 @@ public class CustomerServlet extends HttpServlet {
         }
 
         try {
-            if(customerBO.deleteCustomer(req.getParameter("customerId"))){
+            if (customerBO.deleteCustomer(req.getParameter("customerId"))) {
                 resp.getWriter().write("Customer Deleted");
-            }else {
+                logger.info("Customer deleted");
+            } else {
                 resp.getWriter().write("Customer not Deleted");
+                logger.info("Customer not deleted");
             }
         } catch (Exception e) {
             resp.getWriter().write("Something Wrong");
+            logger.info(e.getMessage());
         }
     }
 }
