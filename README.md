@@ -8,6 +8,8 @@ This repository contains a Java EE API for a Point of Sale (POS) system. The API
 - **JNDI**
 - **Servlets**
 - **ObjectMapper (Jackson library)**
+- **SLF4J (Simple Logging Facade for Java)**
+- **Logback (Logging framework)**
 
 ## API Endpoints
 
@@ -121,5 +123,37 @@ You can use Postman to interact with the API. Follow these steps:
   "qty": 45,
   "price": 259
 }
+
+```
+### Order
+```json
+{
+  "orderId": "O123456",
+  "date": "2024-01-20",
+  "total": 150.0,
+  "discount": 10.0,
+  "balance": 140.0,
+  "customer": {
+    "customerId": "C789",
+    "customerName": "John Doe",
+    "address": "456 Oak Street",
+    "salary": 50000.0
+  },
+  "items": [
+    {
+      "itemCode": "I789",
+      "itemName": "Widget",
+      "qty": 2,
+      "price": 30.0
+    },
+    {
+      "itemCode": "I456",
+      "itemName": "Gadget",
+      "qty": 1,
+      "price": 90.0
+    }
+  ]
+}
+
 
 ```
