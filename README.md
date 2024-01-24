@@ -3,6 +3,8 @@
 ## Overview
 This repository contains a Java EE API for a Point of Sale (POS) system. The API provides endpoints for managing customers, items, and orders.
 
+#### FrontEnd - [FrontEnd Code](https://github.com/Thisarakavishka/Assignment_11?tab=readme-ov-file)
+
 ## Technologies Used
 - **Java EE**
 - **JNDI**
